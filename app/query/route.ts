@@ -1,5 +1,6 @@
 import postgres from "postgres";
 
+// app/query/route.ts
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 async function listInvoices() {
@@ -17,6 +18,9 @@ export async function GET() {
   try {
     return Response.json(await listInvoices());
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return Response.json({ error: error.message }, { status: 500 });
+    }
+    return Response.json({ error: 'Unknown error' }, { status: 500 });
   }
 }
