@@ -112,6 +112,10 @@ export async function GET() {
 
     return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {
-    return Response.json({ error }, { status: 500 });
+    let message = "Unknown error";
+    if (error instanceof Error) {
+      message = error.message;
+    }
+    return Response.json({ error: message }, { status: 500 });
   }
 }
